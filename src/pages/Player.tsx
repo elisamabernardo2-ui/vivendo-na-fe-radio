@@ -1,131 +1,162 @@
-
 import { useState } from 'react';
-import { ArrowLeft, Menu, Heart, Share2 } from 'lucide-react';
+import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Settings, Music, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import CircularPlayer from '@/components/CircularPlayer';
 import { useRadioStream } from '@/hooks/useRadioStream';
 import { useNowPlaying } from '@/hooks/useNowPlaying';
-import { useBranding } from '@/hooks/useBranding';
-import { Slider } from '@/components/ui/slider';
-import { toast } from 'sonner';
+import { Progress } from '@/components/ui/progress';
 
 const Player = () => {
-  const { isPlaying, isLoading, togglePlay, volume, setVolume } = useRadioStream();
+  const { isPlaying, isLoading, togglePlay } = useRadioStream();
   const { nowPlaying } = useNowPlaying();
-  const { branding } = useBranding();
-  const [isLiked, setIsLiked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(149); // 02:29
+  const totalTime = 299; // 04:59
 
-  console.log('Player rendered - nowPlaying:', nowPlaying);
-
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: 'Rádio Vivendo Na Fé',
-          text: `Ouvindo: ${nowPlaying.title}`,
-          url: window.location.href,
-        });
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success('Link copiado para a área de transferência!');
-      }
-    } catch (error) {
-      console.error('Error sharing:', error);
-      toast.error('Erro ao compartilhar');
-    }
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    toast.success(isLiked ? 'Removido dos favoritos' : 'Adicionado aos favoritos');
-  };
-
-  // Use branding cover or nowPlaying artwork, fallback to radio logo
-  const displayImage = branding?.cover_url || nowPlaying.artwork;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sacred-dark via-sacred-dark/95 to-sacred-dark">
+    <div className="min-h-screen bg-gradient-to-b from-green-400 via-teal-500 to-purple-600">
       {/* Header */}
       <div className="flex items-center justify-between p-4 pt-12">
-        <Button variant="ghost" size="sm" className="text-white">
+        <Button variant="ghost" size="sm" className="text-white p-2">
           <ArrowLeft className="h-6 w-6" />
         </Button>
         <div className="text-center">
-          <span className="text-divine-gold text-sm font-medium">AO VIVO</span>
+          <span className="text-white text-lg font-medium">Now Playing</span>
         </div>
-        <Button variant="ghost" size="sm" className="text-white">
+        <Button variant="ghost" size="sm" className="text-white p-2">
           <Menu className="h-6 w-6" />
         </Button>
       </div>
 
       {/* Main Player Section */}
-      <div className="flex flex-col items-center px-8 mt-8">
-        {/* Circular Player */}
-        <div className="mb-12">
-          <CircularPlayer
-            isPlaying={isPlaying}
-            isLoading={isLoading}
-            onTogglePlay={togglePlay}
-            artistImage={displayImage}
-          />
+      <div className="flex flex-col items-center px-8 mt-12">
+        {/* Large Circular Player */}
+        <div className="relative mb-12">
+          <div className="w-64 h-64 bg-white rounded-full flex items-center justify-center shadow-2xl">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-8 bg-teal-500 rounded-full opacity-60"></div>
+              <div className="w-2 h-12 bg-teal-500 rounded-full"></div>
+              <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
+              <div className="w-2 h-10 bg-teal-500 rounded-full"></div>
+              <div className="w-2 h-4 bg-teal-500 rounded-full opacity-60"></div>
+              <div className="w-2 h-8 bg-teal-500 rounded-full"></div>
+              <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
+            </div>
+          </div>
         </div>
 
         {/* Song Info */}
-        <div className="text-center mb-8 max-w-sm">
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            {nowPlaying.title}
+        <div className="text-center mb-12 max-w-sm">
+          <h2 className="text-3xl font-bold text-white mb-3 leading-tight">
+            {nowPlaying.title || "The Best Song"}
           </h2>
-          {nowPlaying.artist && (
-            <p className="text-white/80 text-lg">
-              {nowPlaying.artist}
-            </p>
-          )}
-          {nowPlaying.isLive && (
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-              <span className="text-red-400 text-sm font-medium">TRANSMISSÃO AO VIVO</span>
-            </div>
-          )}
+          <p className="text-white/80 text-xl">
+            {nowPlaying.artist || "New Artist"}
+          </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-8 mb-8">
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={handleLike}
-            className={`text-white hover:text-divine-gold transition-colors ${
-              isLiked ? 'text-divine-gold' : ''
-            }`}
+        {/* Control Buttons */}
+        <div className="flex items-center gap-8 mb-10">
+          <Button 
+            variant="ghost" 
+            size="lg" 
+            className="text-white p-0 w-12 h-12"
           >
-            <Heart className={`h-6 w-6 ${isLiked ? 'fill-current' : ''}`} />
+            <SkipBack className="h-8 w-8" />
           </Button>
           
           <Button
-            variant="ghost"
-            size="lg"
-            onClick={handleShare}
-            className="text-white hover:text-divine-gold transition-colors"
+            onClick={togglePlay}
+            className="w-20 h-20 bg-white rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
+            disabled={isLoading}
           >
-            <Share2 className="h-6 w-6" />
+            {isLoading ? (
+              <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            ) : isPlaying ? (
+              <Pause className="h-10 w-10 text-teal-500" />
+            ) : (
+              <Play className="h-10 w-10 text-teal-500 ml-1" />
+            )}
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="lg" 
+            className="text-white p-0 w-12 h-12"
+          >
+            <SkipForward className="h-8 w-8" />
           </Button>
         </div>
 
-        {/* Volume Control */}
-        <div className="w-full max-w-sm">
+        {/* Progress Bar */}
+        <div className="w-full max-w-sm mb-8">
           <div className="flex items-center gap-4">
-            <span className="text-white/60 text-sm min-w-[40px]">Vol</span>
-            <Slider
-              value={[volume]}
-              onValueChange={(value) => setVolume(value[0])}
-              max={100}
-              step={1}
-              className="flex-1"
-            />
-            <span className="text-white/60 text-sm min-w-[35px]">
-              {volume}%
+            <span className="text-white/80 text-sm min-w-[40px]">
+              {formatTime(currentTime)}
+            </span>
+            <div className="flex-1 h-1 bg-white/30 rounded-full">
+              <div 
+                className="h-full bg-white rounded-full transition-all duration-300"
+                style={{ width: `${(currentTime / totalTime) * 100}%` }}
+              />
+            </div>
+            <span className="text-white/80 text-sm min-w-[40px]">
+              {formatTime(totalTime)}
             </span>
           </div>
+        </div>
+
+        {/* Additional Info */}
+        <div className="w-full max-w-sm flex justify-between items-center mb-8">
+          <span className="text-white/70 text-sm">Lorem ipsum</span>
+          <span className="text-white/70 text-sm">My Playlist</span>
+        </div>
+
+        {/* Popular Song Section */}
+        <div className="w-full max-w-sm mb-8">
+          <div className="flex items-center justify-between p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <Music className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h4 className="text-white font-medium">Popular Song</h4>
+                <p className="text-white/70 text-sm">Top 40 Artist</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-green-400"></div>
+              <Button variant="ghost" size="sm" className="text-white p-1">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20">
+        <div className="flex justify-around items-center py-4">
+          <Button variant="ghost" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
+            <Home className="h-6 w-6" />
+            <span className="text-xs">Home</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
+            <Search className="h-6 w-6" />
+            <span className="text-xs">Search</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col items-center gap-1 text-white hover:text-white">
+            <Music className="h-6 w-6" />
+            <span className="text-xs">Playing</span>
+          </Button>
+          <Button variant="ghost" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
+            <Settings className="h-6 w-6" />
+            <span className="text-xs">Settings</span>
+          </Button>
         </div>
       </div>
     </div>
