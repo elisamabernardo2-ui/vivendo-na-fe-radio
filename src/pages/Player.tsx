@@ -3,6 +3,7 @@ import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Sett
 import { Button } from '@/components/ui/button';
 import { useRadioStream } from '@/hooks/useRadioStream';
 import { usePlayback } from '@/hooks/usePlayback';
+import playerLogo from '@/assets/player-logo.png';
 
 const Player = () => {
   const { isPlaying, isLoading, togglePlay } = useRadioStream();
@@ -35,15 +36,11 @@ const Player = () => {
                 className="w-56 h-56 rounded-full object-cover"
               />
             ) : (
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-8 bg-teal-500 rounded-full opacity-60"></div>
-                <div className="w-2 h-12 bg-teal-500 rounded-full"></div>
-                <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
-                <div className="w-2 h-10 bg-teal-500 rounded-full"></div>
-                <div className="w-2 h-4 bg-teal-500 rounded-full opacity-60"></div>
-                <div className="w-2 h-8 bg-teal-500 rounded-full"></div>
-                <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
-              </div>
+              <img 
+                src={playerLogo} 
+                alt="Rádio Vivendo Na Fé"
+                className="w-56 h-56 rounded-full object-cover"
+              />
             )}
           </div>
         </div>
