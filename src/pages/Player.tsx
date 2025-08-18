@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Menu, SkipBack, SkipForward, Pause, Play } from 'lucide-react';
@@ -6,32 +5,30 @@ import { useNowPlaying } from '@/hooks/useNowPlaying';
 import { useRadioStream } from '@/hooks/useRadioStream';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import radioLogo from '@/assets/logo.png';
-
 const Player = () => {
-  const { nowPlaying } = useNowPlaying();
-  const { 
-    isPlaying, 
-    isLoading, 
+  const {
+    nowPlaying
+  } = useNowPlaying();
+  const {
+    isPlaying,
+    isLoading,
     togglePlay
   } = useRadioStream();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   useEffect(() => {
     const action = searchParams.get('action');
     if (action === 'play') {
       togglePlay();
     }
   }, [searchParams, togglePlay]);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-400 via-blue-500 to-purple-600 text-white">
+  return <div className="min-h-screen bg-gradient-to-b from-teal-400 via-blue-500 to-purple-600 text-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <Button variant="ghost" size="sm" className="text-white">
           <ArrowLeft className="h-6 w-6" />
         </Button>
-        <h1 className="text-lg font-semibold">Now Playing</h1>
+        <h1 className="text-lg font-semibold">Rádio Vivendo Na Fé</h1>
         <Button variant="ghost" size="sm" className="text-white">
           <Menu className="h-6 w-6" />
         </Button>
@@ -41,15 +38,10 @@ const Player = () => {
       <div className="flex justify-center mt-12 mb-8">
         <div className="w-64 h-64 bg-white rounded-full flex items-center justify-center shadow-2xl">
           <div className="w-16 h-16 flex items-center justify-center">
-            <img 
-              src={nowPlaying.artwork || radioLogo} 
-              alt="Artist" 
-              className="w-full h-full object-cover rounded-full"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = radioLogo;
-              }}
-            />
+            <img src={nowPlaying.artwork || radioLogo} alt="Artist" className="w-full h-full object-cover rounded-full" onError={e => {
+            const target = e.target as HTMLImageElement;
+            target.src = radioLogo;
+          }} />
           </div>
         </div>
       </div>
@@ -70,18 +62,8 @@ const Player = () => {
           <SkipBack className="h-8 w-8" />
         </Button>
         
-        <Button
-          onClick={togglePlay}
-          disabled={isLoading}
-          className="w-16 h-16 rounded-full bg-white hover:bg-white/90 text-purple-600 shadow-lg"
-        >
-          {isLoading ? (
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-600 border-t-transparent" />
-          ) : isPlaying ? (
-            <Pause className="h-8 w-8" />
-          ) : (
-            <Play className="h-8 w-8 ml-1" />
-          )}
+        <Button onClick={togglePlay} disabled={isLoading} className="w-16 h-16 rounded-full bg-white hover:bg-white/90 text-purple-600 shadow-lg">
+          {isLoading ? <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-600 border-t-transparent" /> : isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8 ml-1" />}
         </Button>
         
         <Button variant="ghost" size="lg" className="text-white">
@@ -146,8 +128,6 @@ const Player = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Player;
