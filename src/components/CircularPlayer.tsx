@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Play, Pause } from 'lucide-react';
 import WaveformBars from './WaveformBars';
-import radioLogo from '@/assets/radio-logo.png';
+import radioLogo from '@/assets/logo.png';
 
 interface CircularPlayerProps {
   isPlaying: boolean;
