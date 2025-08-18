@@ -2,7 +2,7 @@
   "name": "Radio Vivendo Na Fé",
   "short_name": "Radio Fé",
   "description": "Rádio cristã transmitindo esperança, fé e música gospel 24 horas por dia",
-  "start_url": "/",
+  "start_url": "/player",
   "display": "standalone",
   "background_color": "#1a1625",
   "theme_color": "#f59e0b",
@@ -41,7 +41,7 @@
       "name": "Ouvir Agora",
       "short_name": "Play",
       "description": "Começar a ouvir a rádio",
-      "url": "/?action=play",
+      "url": "/player?action=play",
       "icons": [
         {
           "src": "/icon-192.png",

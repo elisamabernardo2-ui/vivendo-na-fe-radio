@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Radio, Home, Newspaper, Info, Phone } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import logo from '@/assets/logo.png';
 
 interface HeaderProps {
   activeSection: string;
@@ -34,8 +35,17 @@ const Header = ({ activeSection, onSectionChange }: HeaderProps) => {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => handleNavigation('home')}
           >
-            <div className="p-2 bg-gradient-divine rounded-full group-hover:scale-110 transition-transform duration-300">
-              <Radio className="h-6 w-6 text-sacred-dark" />
+            <div className="w-10 h-10 rounded-full overflow-hidden group-hover:scale-110 transition-transform duration-300 bg-divine-gold/10 flex items-center justify-center">
+              <img 
+                src={logo} 
+                alt="Radio Vivendo Na Fé" 
+                className="w-8 h-8 object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement!.innerHTML = '<div class="p-2 bg-gradient-divine rounded-full"><svg class="h-6 w-6 text-sacred-dark" fill="currentColor" viewBox="0 0 24 24"><path d="M3.24 6.15C2.51 6.43 2 7.17 2 8v8c0 1.1.89 2 2 2h16c1.11 0 2-.9 2-2V8c0-.83-.51-1.57-1.24-1.85L12 .69 3.24 6.15z"/></svg></div>';
+                }}
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-divine-gold">Radio Vivendo Na Fé</h1>

@@ -4,7 +4,11 @@ import { Card } from '@/components/ui/card';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
-const RadioPlayer = () => {
+interface RadioPlayerProps {
+  autoplay?: boolean;
+}
+
+const RadioPlayer = ({ autoplay = false }: RadioPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(80);
@@ -18,6 +22,17 @@ const RadioPlayer = () => {
       audioRef.current.volume = volume / 100;
     }
   }, [volume]);
+
+  useEffect(() => {
+    if (autoplay) {
+      // Try to autoplay after a short delay
+      const timer = setTimeout(() => {
+        togglePlay();
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [autoplay]);
 
   const togglePlay = async () => {
     if (!audioRef.current) {
