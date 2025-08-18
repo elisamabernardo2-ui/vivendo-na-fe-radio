@@ -1,21 +1,12 @@
-import { useState } from 'react';
+
 import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Settings, Music, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRadioStream } from '@/hooks/useRadioStream';
-import { useNowPlaying } from '@/hooks/useNowPlaying';
-import { Progress } from '@/components/ui/progress';
+import { usePlayback } from '@/hooks/usePlayback';
 
 const Player = () => {
   const { isPlaying, isLoading, togglePlay } = useRadioStream();
-  const { nowPlaying } = useNowPlaying();
-  const [currentTime, setCurrentTime] = useState(149); // 02:29
-  const totalTime = 299; // 04:59
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  const { playback, formatTime, getProgress } = usePlayback();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-400 via-teal-500 to-purple-600">
@@ -37,30 +28,40 @@ const Player = () => {
         {/* Large Circular Player */}
         <div className="relative mb-12">
           <div className="w-64 h-64 bg-white rounded-full flex items-center justify-center shadow-2xl">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-8 bg-teal-500 rounded-full opacity-60"></div>
-              <div className="w-2 h-12 bg-teal-500 rounded-full"></div>
-              <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
-              <div className="w-2 h-10 bg-teal-500 rounded-full"></div>
-              <div className="w-2 h-4 bg-teal-500 rounded-full opacity-60"></div>
-              <div className="w-2 h-8 bg-teal-500 rounded-full"></div>
-              <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
-            </div>
+            {playback.artwork ? (
+              <img 
+                src={playback.artwork} 
+                alt="Album artwork"
+                className="w-56 h-56 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-8 bg-teal-500 rounded-full opacity-60"></div>
+                <div className="w-2 h-12 bg-teal-500 rounded-full"></div>
+                <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
+                <div className="w-2 h-10 bg-teal-500 rounded-full"></div>
+                <div className="w-2 h-4 bg-teal-500 rounded-full opacity-60"></div>
+                <div className="w-2 h-8 bg-teal-500 rounded-full"></div>
+                <div className="w-2 h-6 bg-teal-500 rounded-full opacity-80"></div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Song Info */}
-        <div className="text-center mb-12 max-w-sm">
+        <div className="text-center mb-8 max-w-sm">
           <h2 className="text-3xl font-bold text-white mb-3 leading-tight">
-            {nowPlaying.title || "The Best Song"}
+            {playback.title}
           </h2>
-          <p className="text-white/80 text-xl">
-            {nowPlaying.artist || "New Artist"}
-          </p>
+          {playback.artist && (
+            <p className="text-white/80 text-xl">
+              {playback.artist}
+            </p>
+          )}
         </div>
 
         {/* Control Buttons */}
-        <div className="flex items-center gap-8 mb-10">
+        <div className="flex items-center gap-8 mb-8">
           <Button 
             variant="ghost" 
             size="lg" 
@@ -92,28 +93,40 @@ const Player = () => {
           </Button>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar and Time */}
         <div className="w-full max-w-sm mb-8">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-2">
             <span className="text-white/80 text-sm min-w-[40px]">
-              {formatTime(currentTime)}
+              {formatTime(playback.currentTime)}
             </span>
             <div className="flex-1 h-1 bg-white/30 rounded-full">
               <div 
                 className="h-full bg-white rounded-full transition-all duration-300"
-                style={{ width: `${(currentTime / totalTime) * 100}%` }}
+                style={{ 
+                  width: playback.isLive ? '100%' : `${getProgress()}%`
+                }}
               />
             </div>
             <span className="text-white/80 text-sm min-w-[40px]">
-              {formatTime(totalTime)}
+              {playback.isLive ? 'LIVE' : (playback.duration ? formatTime(playback.duration) : '--:--')}
             </span>
           </div>
+          
+          {/* Live indicator */}
+          {playback.isLive && (
+            <div className="text-center">
+              <div className="flex justify-center items-center gap-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-white/90 text-xs font-medium">AO VIVO</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Additional Info */}
         <div className="w-full max-w-sm flex justify-between items-center mb-8">
-          <span className="text-white/70 text-sm">Lorem ipsum</span>
-          <span className="text-white/70 text-sm">My Playlist</span>
+          <span className="text-white/70 text-sm">Rádio Vivendo Na Fé</span>
+          <span className="text-white/70 text-sm">Transmissão</span>
         </div>
 
         {/* Popular Song Section */}
@@ -124,8 +137,8 @@ const Player = () => {
                 <Music className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h4 className="text-white font-medium">Popular Song</h4>
-                <p className="text-white/70 text-sm">Top 40 Artist</p>
+                <h4 className="text-white font-medium">Música Anterior</h4>
+                <p className="text-white/70 text-sm">Recém tocada</p>
               </div>
             </div>
             <div className="flex items-center gap-2">

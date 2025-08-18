@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      current_playback: {
+        Row: {
+          artist: string | null
+          artwork_url: string | null
+          created_at: string
+          duration_sec: number | null
+          id: string
+          is_live: boolean
+          singleton: boolean
+          song_title: string
+          source: string | null
+          started_at: string
+          updated_at: string
+        }
+        Insert: {
+          artist?: string | null
+          artwork_url?: string | null
+          created_at?: string
+          duration_sec?: number | null
+          id?: string
+          is_live?: boolean
+          singleton?: boolean
+          song_title: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Update: {
+          artist?: string | null
+          artwork_url?: string | null
+          created_at?: string
+          duration_sec?: number | null
+          id?: string
+          is_live?: boolean
+          singleton?: boolean
+          song_title?: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      play_events: {
+        Row: {
+          artist: string | null
+          artwork_url: string | null
+          created_at: string
+          duration_sec: number | null
+          ended_at: string | null
+          id: string
+          is_live: boolean
+          song_title: string
+          source: string | null
+          started_at: string
+          updated_at: string
+        }
+        Insert: {
+          artist?: string | null
+          artwork_url?: string | null
+          created_at?: string
+          duration_sec?: number | null
+          ended_at?: string | null
+          id?: string
+          is_live?: boolean
+          song_title: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Update: {
+          artist?: string | null
+          artwork_url?: string | null
+          created_at?: string
+          duration_sec?: number | null
+          ended_at?: string | null
+          id?: string
+          is_live?: boolean
+          song_title?: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       songs: {
         Row: {
           artist: string | null
