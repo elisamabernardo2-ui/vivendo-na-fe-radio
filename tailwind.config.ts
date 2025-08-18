@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Radio Vivendo Na Fe Custom Colors
+				'celestial-blue': 'hsl(var(--celestial-blue))',
+				'divine-gold': 'hsl(var(--divine-gold))',
+				'pure-white': 'hsl(var(--pure-white))',
+				'sacred-dark': 'hsl(var(--sacred-dark))',
+				'holy-light': 'hsl(var(--holy-light))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +90,37 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '0.8',
+						transform: 'scale(1.05)'
+					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-10px)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'float': 'float 3s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'gradient-divine': 'var(--gradient-divine)',
+				'gradient-celestial': 'var(--gradient-celestial)',
+				'gradient-player': 'var(--gradient-player)'
+			},
+			boxShadow: {
+				'divine': 'var(--shadow-divine)',
+				'celestial': 'var(--shadow-celestial)',
+				'glow': 'var(--glow-holy)'
 			}
 		}
 	},
