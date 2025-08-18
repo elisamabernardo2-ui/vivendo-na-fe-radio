@@ -10,6 +10,8 @@ interface HeaderProps {
 
 const Header = ({ activeSection, onSectionChange }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  
+  console.log('Header component rendered, activeSection:', activeSection);
 
   const menuItems = [
     { id: 'home', label: 'Início', icon: Home },

@@ -4,6 +4,8 @@ import { Download, Play, Users, Clock } from 'lucide-react';
 import RadioPlayer from './RadioPlayer';
 
 const HeroSection = () => {
+  console.log('HeroSection component rendered');
+  
   const stats = [
     { icon: Users, label: "Ouvintes Online", value: "1.2K" },
     { icon: Clock, label: "Hrs no Ar", value: "24/7" },
