@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 interface NowPlayingData {
   title: string;
   artist?: string;
+  artwork?: string;
   isLive: boolean;
 }
 
@@ -35,6 +36,7 @@ export const useNowPlaying = () => {
           setNowPlaying({
             title: data.title || data.song || 'Ao Vivo',
             artist: data.artist || data.dj,
+            artwork: data.artwork || data.image,
             isLive: data.isLive !== false
           });
         } else {
