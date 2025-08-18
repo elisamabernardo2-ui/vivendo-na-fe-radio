@@ -113,7 +113,7 @@ const Player = () => {
           
           <Button variant="ghost" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
             <Search className="h-6 w-6" />
-            <span className="text-xs">Search</span>
+            
           </Button>
           
           
