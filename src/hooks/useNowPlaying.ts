@@ -1,4 +1,6 @@
+
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface NowPlayingData {
   title: string;
@@ -9,43 +11,38 @@ interface NowPlayingData {
 
 export const useNowPlaying = () => {
   const [nowPlaying, setNowPlaying] = useState<NowPlayingData>({
-    title: 'Ao Vivo',
+    title: 'Rádio Vivendo Na Fé',
     isLive: true
   });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Check if there's a custom endpoint for now playing data
-    const nowPlayingUrl = import.meta.env.VITE_NOWPLAYING_URL;
-    
-    if (!nowPlayingUrl) {
-      // Default to live status if no endpoint is configured
-      setNowPlaying({
-        title: 'Transmissão Ao Vivo',
-        isLive: true
-      });
-      return;
-    }
-
     const fetchNowPlaying = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(nowPlayingUrl);
-        if (response.ok) {
-          const data = await response.json();
+        console.log('Fetching now playing data...');
+        
+        // Call our Edge Function
+        const { data, error } = await supabase.functions.invoke('now-playing');
+        
+        if (error) {
+          console.error('Error calling now-playing function:', error);
+          throw error;
+        }
+
+        if (data) {
+          console.log('Now playing data received:', data);
           setNowPlaying({
-            title: data.title || data.song || 'Ao Vivo',
-            artist: data.artist || data.dj,
-            artwork: data.artwork || data.image,
+            title: data.title || 'Rádio Vivendo Na Fé',
+            artist: data.artist,
+            artwork: data.artwork,
             isLive: data.isLive !== false
           });
-        } else {
-          throw new Error('Failed to fetch');
         }
       } catch (error) {
-        console.log('Could not fetch now playing data, using fallback');
+        console.log('Could not fetch now playing data, using fallback:', error);
         setNowPlaying({
-          title: 'Transmissão Ao Vivo',
+          title: 'Rádio Vivendo Na Fé',
           isLive: true
         });
       } finally {
@@ -56,8 +53,8 @@ export const useNowPlaying = () => {
     // Fetch immediately
     fetchNowPlaying();
 
-    // Update every 30 seconds
-    const interval = setInterval(fetchNowPlaying, 30000);
+    // Update every 15 seconds (more frequent for better UX)
+    const interval = setInterval(fetchNowPlaying, 15000);
 
     return () => clearInterval(interval);
   }, []);
