@@ -1,12 +1,13 @@
 
-import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Settings, Music, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Settings, Music, MoreVertical, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { useRadioStream } from '@/hooks/useRadioStream';
 import { usePlayback } from '@/hooks/usePlayback';
 import radioLogo from '@/assets/radio-logo.png';
 
 const Player = () => {
-  const { isPlaying, isLoading, togglePlay } = useRadioStream();
+  const { isPlaying, isLoading, togglePlay, volume, isMuted, setVolume, toggleMute } = useRadioStream();
   const { playback, formatTime, getProgress } = usePlayback();
 
   return (
@@ -118,6 +119,38 @@ const Player = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Volume Controls */}
+        <div className="w-full max-w-sm mb-8">
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={toggleMute}
+              variant="ghost"
+              size="sm"
+              className="text-white p-2 hover:bg-white/10"
+            >
+              {isMuted ? (
+                <VolumeX className="h-5 w-5" />
+              ) : (
+                <Volume2 className="h-5 w-5" />
+              )}
+            </Button>
+            
+            <div className="flex-1">
+              <Slider
+                value={[isMuted ? 0 : volume * 100]}
+                onValueChange={(value) => setVolume(value[0] / 100)}
+                max={100}
+                step={1}
+                className="w-full"
+              />
+            </div>
+            
+            <span className="text-white/70 text-sm min-w-[35px]">
+              {Math.round((isMuted ? 0 : volume) * 100)}%
+            </span>
+          </div>
         </div>
 
         {/* Additional Info */}
