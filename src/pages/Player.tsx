@@ -111,10 +111,7 @@ const Player = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20">
         <div className="flex justify-around items-center py-4">
           
-          <Button variant="ghost" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
-            <Search className="h-6 w-6" />
-            
-          </Button>
+          
           
           
         </div>
