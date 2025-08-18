@@ -2,106 +2,35 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Download, Smartphone, X } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 const InstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const { toast } = useToast();
+  const { isInstalled, canInstall, promptInstall } = usePWAInstall();
 
   useEffect(() => {
-    // Verificar se já está instalado
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (window.navigator as any).standalone === true;
-    
-    if (isStandalone || isInWebAppiOS) {
-      setIsInstalled(true);
-      return;
-    }
-
-    // Listener para o evento beforeinstallprompt
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowPrompt(true);
-    };
-
-    // Listener para quando o app é instalado
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setShowPrompt(false);
-      setDeferredPrompt(null);
-      toast({
-        title: "App Instalado!",
-        description: "Radio Vivendo Na Fe foi instalado com sucesso!",
-      });
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
     // Mostrar prompt após alguns segundos se estiver disponível
     const timer = setTimeout(() => {
-      if (!isInstalled) {
+      if (!isInstalled && canInstall) {
         setShowPrompt(true);
       }
     }, 3000);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
       clearTimeout(timer);
     };
-  }, [toast, isInstalled]);
+  }, [isInstalled, canInstall]);
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      // Fallback para dispositivos iOS ou outros navegadores
-      toast({
-        title: "Instalar App",
-        description: "Para instalar: toque no botão compartilhar e selecione 'Adicionar à Tela de Início'",
-      });
-      return;
-    }
-
-    try {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        toast({
-          title: "Instalação iniciada!",
-          description: "O app será instalado em breve...",
-        });
-      }
-      
-      setDeferredPrompt(null);
-      setShowPrompt(false);
-    } catch (error) {
-      console.error('Erro na instalação:', error);
-      toast({
-        title: "Erro na instalação",
-        description: "Tente novamente mais tarde.",
-        variant: "destructive",
-      });
-    }
+  const handleInstallClick = () => {
+    promptInstall();
+    setShowPrompt(false);
   };
 
   const handleDismiss = () => {
     setShowPrompt(false);
   };
 
-  if (isInstalled || !showPrompt) {
+  if (isInstalled || !showPrompt || !canInstall) {
     return null;
   }
 

@@ -2,9 +2,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Play, Users, Clock } from 'lucide-react';
 import RadioPlayer from './RadioPlayer';
+import IOSInstallModal from './IOSInstallModal';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 const HeroSection = () => {
   console.log('HeroSection component rendered');
+  const { isInstalled, isIOS, showIOSModal, setShowIOSModal, promptInstall } = usePWAInstall();
   
   const stats = [
     { icon: Users, label: "Ouvintes Online", value: "1.2K" },
@@ -55,16 +58,32 @@ const HeroSection = () => {
               <p className="text-muted-foreground">
                 Instale em seu dispositivo para ouvir em qualquer lugar
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button className="bg-divine-gold hover:bg-divine-gold/90 text-sacred-dark font-medium shadow-glow">
-                  <Download className="h-4 w-4 mr-2" />
-                  Android
-                </Button>
-                <Button className="bg-divine-gold hover:bg-divine-gold/90 text-sacred-dark font-medium shadow-glow">
-                  <Download className="h-4 w-4 mr-2" />
-                  iOS
-                </Button>
-              </div>
+              {!isInstalled && (
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button 
+                    onClick={promptInstall}
+                    className="bg-divine-gold hover:bg-divine-gold/90 text-sacred-dark font-medium shadow-glow"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    {isIOS ? 'Instalar App' : 'Android'}
+                  </Button>
+                  {!isIOS && (
+                    <Button 
+                      onClick={() => setShowIOSModal(true)}
+                      className="bg-divine-gold hover:bg-divine-gold/90 text-sacred-dark font-medium shadow-glow"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      iOS
+                    </Button>
+                  )}
+                </div>
+              )}
+              
+              {isInstalled && (
+                <div className="text-center text-divine-gold">
+                  ✓ App já instalado!
+                </div>
+              )}
             </div>
           </Card>
 
@@ -75,6 +94,11 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+      
+      <IOSInstallModal 
+        open={showIOSModal}
+        onOpenChange={setShowIOSModal}
+      />
     </div>
   );
 };
