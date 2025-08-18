@@ -3,7 +3,7 @@ import { ArrowLeft, Menu, SkipBack, SkipForward, Play, Pause, Home, Search, Sett
 import { Button } from '@/components/ui/button';
 import { useRadioStream } from '@/hooks/useRadioStream';
 import { usePlayback } from '@/hooks/usePlayback';
-import playerLogo from '@/assets/player-logo.png';
+import radioLogo from '@/assets/radio-logo.png';
 
 const Player = () => {
   const { isPlaying, isLoading, togglePlay } = useRadioStream();
@@ -37,7 +37,7 @@ const Player = () => {
               />
             ) : (
               <img 
-                src={playerLogo} 
+                src={radioLogo} 
                 alt="Rádio Vivendo Na Fé"
                 className="w-56 h-56 rounded-full object-cover"
               />
