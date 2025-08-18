@@ -4,8 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface BrandingData {
   name: string;
-  logo_url?: string;
-  cover_url?: string;
+  logo_url?: string | null;
+  cover_url?: string | null;
 }
 
 export const useBranding = () => {
@@ -17,7 +17,7 @@ export const useBranding = () => {
       try {
         const { data, error } = await supabase
           .from('app_branding')
-          .select('*')
+          .select('name, logo_url, cover_url')
           .eq('active', true)
           .limit(1)
           .maybeSingle();
