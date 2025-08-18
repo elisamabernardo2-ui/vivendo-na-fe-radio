@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Radio, Home, Newspaper, Info, Phone } from 'lucide-react';
+import { Menu, X, Radio, Home, Newspaper, Info, Phone, Settings } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import logo from '@/assets/logo.png';
 
@@ -73,6 +74,16 @@ const Header = ({ activeSection, onSectionChange }: HeaderProps) => {
                 </Button>
               );
             })}
+            
+            <Link to="/auth">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 text-sm transition-all duration-300 text-muted-foreground hover:text-divine-gold hover:bg-divine-gold/5"
+              >
+                <Settings className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
           </nav>
 
           {/* Mobile Menu */}
@@ -117,6 +128,16 @@ const Header = ({ activeSection, onSectionChange }: HeaderProps) => {
                     </Button>
                   );
                 })}
+                
+                <Link to="/auth" onClick={() => setIsOpen(false)}>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-3 text-base transition-all duration-300 text-muted-foreground hover:text-divine-gold hover:bg-divine-gold/5"
+                  >
+                    <Settings className="h-5 w-5" />
+                    Admin
+                  </Button>
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
