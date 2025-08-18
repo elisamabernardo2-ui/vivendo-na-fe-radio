@@ -35,7 +35,7 @@ const Player = () => {
         <Button variant="ghost" size="sm" className="text-white">
           <ArrowLeft className="h-6 w-6" />
         </Button>
-        <h1 className="text-lg font-semibold">Rádio Vivendo Na Fé</h1>
+        <div></div>
         <Button variant="ghost" size="sm" className="text-white">
           <Menu className="h-6 w-6" />
         </Button>
@@ -104,7 +104,7 @@ const Player = () => {
           {nowPlaying.title || 'The Best Song'}
         </h2>
         <p className="text-white/80 text-lg">
-          {nowPlaying.artist || 'New Artist'}
+          {nowPlaying.title || 'Nome da música'}
         </p>
       </div>
 
