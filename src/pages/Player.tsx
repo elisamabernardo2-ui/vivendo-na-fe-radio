@@ -26,9 +26,7 @@ const Player = () => {
         <div className="text-center">
           
         </div>
-        <Button variant="ghost" size="sm" className="text-white p-2">
-          <Menu className="h-6 w-6" />
-        </Button>
+        
       </div>
 
       {/* Main Player Section */}
