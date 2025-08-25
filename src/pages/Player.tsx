@@ -22,9 +22,7 @@ const Player = () => {
   return <div className="min-h-screen bg-gradient-to-b from-green-400 via-teal-500 to-purple-600">
       {/* Header */}
       <div className="flex items-center justify-between p-4 pt-12">
-        <Button variant="ghost" size="sm" className="text-white p-2">
-          <ArrowLeft className="h-6 w-6" />
-        </Button>
+        
         <div className="text-center">
           
         </div>
