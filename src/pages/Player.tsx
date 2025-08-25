@@ -96,10 +96,7 @@ const Player = () => {
         
 
         {/* Additional Info */}
-        <div className="w-full max-w-sm flex justify-between items-center mb-8">
-          <span className="text-white/70 text-sm">Rádio Vivendo Na Fé</span>
-          <span className="text-white/70 text-sm">Transmissão</span>
-        </div>
+        
 
         {/* Popular Song Section */}
         <div className="w-full max-w-sm mb-8">
